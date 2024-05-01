@@ -1,8 +1,10 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/alecthomas/kong"
 	"github.com/sirupsen/logrus"
@@ -15,13 +17,14 @@ var (
 )
 
 type GlobalFlags struct {
-	URI     string `name:"mylar3.api-uri" help:"Mylar3 API URL" env:"MYLAR_API_URI" default:"http://localhost:8090/api"`
-	APIKey  string `name:"mylar3.api-key" help:"Mylar3 API key" env:"MYLAR_API_KEY" default:""`
-	Timeout int    `name:"mylar3.timeout" help:"Timeout in seconds to connect to the server" default:"10"`
+	URI       *url.URL `name:"mylar3.api-uri" help:"Mylar3 API URL" env:"MYLAR3_API_URI" required:"True"`
+	APIKey    string   `name:"mylar3.api-key" help:"Mylar3 API key" env:"MYLAR3_API_KEY" required:"True"`
+	Timeout   int      `name:"mylar3.timeout" help:"Timeout in seconds to connect to the server" env:"MYLAR3_TIMEOUT" default:"10"`
+	VerifySSL bool     `name:"mylar3.verify-ssl" help:"Whether to verify the SSL certificate when connecting to the Mylar3 server." negatable:"True" env:"MYLAR3_VERIFY_SSL" default:"true"`
 
-	WebListenAddress string `name:"web.listen-address" help:"Address to listen on for exporter" default:":9091"`
-	WebTelemetryPath string `name:"web.telemetry-path" help:"Metrics expose path" default:"/metrics"`
-	LogLevel         string `name:"log.level" help:"Only log messages with the given severity or above. Valid levels: [debug, info, warn, error, fatal]" enum:"debug,info,warn,error,fatal" default:"error"`
+	WebListenAddress string `name:"web.listen-address" help:"Address where the exporter will listen for connections" env:"EXPORTER_LISTEN_ADDRESS" default:":9091"`
+	WebTelemetryPath string `name:"web.telemetry-path" help:"Metrics expose path" env:"EXPORTER_LISTEN_PATH" default:"/metrics"`
+	LogLevel         string `name:"log.level" help:"Only log messages with the given severity or above. Valid levels: [debug, info, warn, error, fatal]" enum:"debug,info,warn,error,fatal" env:"EXPORTER_LOG_LEVEL" default:"error"`
 
 	Version bool `name:"version" help:"Show exporter version"`
 }
@@ -57,9 +60,13 @@ func main() {
 	logger.SetLevel(levels[opts.LogLevel])
 
 	mylar3_opts := &exporter.Mylar3Opts{
-		URI:     opts.URI,
+		URI:     opts.URI.String(),
 		APIKey:  opts.APIKey,
 		Timeout: opts.Timeout,
+	}
+
+	if !opts.VerifySSL {
+		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	}
 
 	exporter := exporter.New(mylar3_opts, logger)
