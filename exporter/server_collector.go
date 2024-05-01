@@ -13,6 +13,16 @@ type versionCollector struct {
 	base *baseCollector
 }
 
+var (
+	metricsUp = prometheus.NewDesc(
+		prometheus.BuildFQName(exporterPrefix, "", "up"),
+		"Whether the mylar3 server is answering requests from this exporter. "+
+			"A `version` label with the server version is added.",
+		[]string{"server", "version"},
+		nil,
+	)
+)
+
 func newServerCollector(ctx context.Context, client *mylar3Client, logger *logrus.Logger) *versionCollector {
 	return &versionCollector{
 		ctx:  ctx,
@@ -29,15 +39,6 @@ func (c *versionCollector) Collect(ch chan<- prometheus.Metric) {
 }
 
 func (c *versionCollector) collect(ch chan<- prometheus.Metric) {
-
-	metricsUp := prometheus.NewDesc(
-		prometheus.BuildFQName(exporterPrefix, "", "up"),
-		"Whether the mylar3 server is answering requests from this exporter. "+
-			"A `version` label with the server version is added.",
-		[]string{"server", "version"},
-		nil,
-	)
-
 	client := c.base.client
 	logger := c.base.logger
 
