@@ -49,6 +49,11 @@ func (c *mylar3Client) makeRequest(command string, params map[string]string) ([]
 		return nil, err
 	}
 
+	if response.StatusCode != http.StatusOK {
+		c.logger.Errorf("Error getting %s: %s", c.opts.URI, response.Status)
+		return nil, err
+	}
+
 	defer response.Body.Close()
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
