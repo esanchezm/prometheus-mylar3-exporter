@@ -45,7 +45,7 @@ func (c *versionCollector) collect(ch chan<- prometheus.Metric) {
 	version := "unknown"
 	value := 0.0
 	if err == nil {
-		logger.Info("Version info:", string(response))
+		logger.Debug("Version info:", string(response))
 
 		var data map[string]interface{}
 
