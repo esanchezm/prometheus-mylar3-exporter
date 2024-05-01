@@ -29,8 +29,8 @@ func New(opts *Mylar3Opts) *Exporter {
 func (e *Exporter) makeRegistry(ctx context.Context) *prometheus.Registry {
 	registry := prometheus.NewRegistry()
 
-	serverCollector := newServerCollector(ctx, e.client, e.logger)
-	registry.MustRegister(serverCollector)
+	registry.MustRegister(newServerCollector(ctx, e.client, e.logger))
+	registry.MustRegister(newIndexCollector(ctx, e.client, e.logger))
 
 	return registry
 }
