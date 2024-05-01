@@ -16,14 +16,14 @@ type indexCollector struct {
 var (
 	metricsSeriesCount = prometheus.NewDesc(
 		prometheus.BuildFQName(exporterPrefix, "", "series_count"),
-		"Number of watched series.",
+		"Number of series. A `publisher` label is added",
 		[]string{"server", "publisher"},
 		nil,
 	)
 
 	metricsIssuesCount = prometheus.NewDesc(
 		prometheus.BuildFQName(exporterPrefix, "", "issues_count"),
-		"Total number of issues available.",
+		"Issues count. Labels `publisher`, `name`, `year`, and `status` are added",
 		[]string{"server", "publisher", "name", "year", "status"},
 		nil,
 	)
