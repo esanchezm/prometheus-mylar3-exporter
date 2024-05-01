@@ -1,5 +1,5 @@
 package exporter
 
 const (
-	exporterPrefix = "mylar3_"
+	exporterPrefix = "mylar3"
 )
