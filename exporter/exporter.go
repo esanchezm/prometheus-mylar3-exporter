@@ -17,8 +17,7 @@ type Exporter struct {
 	opts   *Mylar3Opts
 }
 
-func New(opts *Mylar3Opts) *Exporter {
-	logger := logrus.New()
+func New(opts *Mylar3Opts, logger *logrus.Logger) *Exporter {
 	return &Exporter{
 		client: newMylar3Client(opts, logger),
 		logger: logger,

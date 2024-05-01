@@ -46,7 +46,7 @@ func main() {
 		return
 	}
 
-	log := logrus.New()
+	logger := logrus.New()
 	levels := map[string]logrus.Level{
 		"debug": logrus.DebugLevel,
 		"error": logrus.ErrorLevel,
@@ -54,7 +54,7 @@ func main() {
 		"info":  logrus.InfoLevel,
 		"warn":  logrus.WarnLevel,
 	}
-	log.SetLevel(levels[opts.LogLevel])
+	logger.SetLevel(levels[opts.LogLevel])
 
 	mylar3_opts := &exporter.Mylar3Opts{
 		URI:     opts.URI,
@@ -62,7 +62,7 @@ func main() {
 		Timeout: opts.Timeout,
 	}
 
-	exporter := exporter.New(mylar3_opts)
+	exporter := exporter.New(mylar3_opts, logger)
 
 	http.Handle(opts.WebTelemetryPath, exporter.Handler())
 	http.ListenAndServe(opts.WebListenAddress, nil)

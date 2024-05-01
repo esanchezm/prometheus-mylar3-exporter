@@ -24,6 +24,7 @@ func newMylar3Client(opts *Mylar3Opts, logger *logrus.Logger) *mylar3Client {
 	return &mylar3Client{
 		client: &http.Client{},
 		opts:   opts,
+		logger: logger,
 	}
 }
 
