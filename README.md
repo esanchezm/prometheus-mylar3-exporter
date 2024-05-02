@@ -32,3 +32,4 @@ These are the metrics this program exports:
 | `mylar3_up`           | gauge | Whether the Mylar3 server is answering requests from this exporter. A `version` label with the server version is added. |
 | `mylar3_series_count` | gauge | Total number of series, grouped by `publisher` as a metric label.                                                       |
 | `mylar3_issues_count` | gauge | Total number of issues, grouped by series `publisher`, `name`, `year`, and `status`.                                    |
+| `mylar3_wanted_count` | gauge | Total number of issues in wanted state, with labels for `publisher`, `name` and `year`                  |
