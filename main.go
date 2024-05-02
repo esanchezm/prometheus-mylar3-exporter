@@ -49,7 +49,7 @@ func main() {
 		return
 	}
 
-	logger := logrus.New()
+	log := logrus.New()
 	levels := map[string]logrus.Level{
 		"debug": logrus.DebugLevel,
 		"error": logrus.ErrorLevel,
@@ -57,7 +57,7 @@ func main() {
 		"info":  logrus.InfoLevel,
 		"warn":  logrus.WarnLevel,
 	}
-	logger.SetLevel(levels[opts.LogLevel])
+	log.SetLevel(levels[opts.LogLevel])
 
 	mylar3_opts := &exporter.Mylar3Opts{
 		URI:     opts.URI.String(),
@@ -69,8 +69,9 @@ func main() {
 		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	}
 
-	exporter := exporter.New(mylar3_opts, logger)
+	exporter := exporter.New(mylar3_opts, log)
 
 	http.Handle(opts.WebTelemetryPath, exporter.Handler())
+	log.Info("Starting exporter on ", opts.WebListenAddress)
 	http.ListenAndServe(opts.WebListenAddress, nil)
 }
