@@ -13,15 +13,6 @@ type wantedCollector struct {
 	base *baseCollector
 }
 
-var (
-	metricsWantedCount = prometheus.NewDesc(
-		prometheus.BuildFQName(exporterPrefix, "", "wanted_count"),
-		"Number of issues in `Wanted` state. Labels `publisher`, `name` and `year` are added",
-		[]string{"server", "publisher", "name", "year"},
-		nil,
-	)
-)
-
 func newWantedCollector(ctx context.Context, client *mylar3Client, logger *logrus.Logger) *wantedCollector {
 	return &wantedCollector{
 		ctx:  ctx,
