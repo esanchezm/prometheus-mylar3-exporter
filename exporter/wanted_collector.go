@@ -54,9 +54,8 @@ func (c *wantedCollector) collect(ch chan<- prometheus.Metric) {
 			key := publisher + name + year
 			if metrics[key] == nil {
 				metrics[key] = prometheus.NewGauge(prometheus.GaugeOpts{
-					Namespace: exporterPrefix,
-					Name:      prometheus.BuildFQName(exporterPrefix, "", "wanted_count"),
-					Help:      "Number of issues in `Wanted` state. Labels `publisher`, `name` and `year` are added",
+					Name: prometheus.BuildFQName(exporterPrefix, "", "wanted_count"),
+					Help: "Number of issues in `Wanted` state. Labels `publisher`, `name` and `year` are added",
 					ConstLabels: map[string]string{
 						"server":    client.opts.URI,
 						"publisher": publisher,
