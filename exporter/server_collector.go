@@ -42,15 +42,22 @@ func (c *versionCollector) collect(ch chan<- prometheus.Metric) {
 	client := c.base.client
 	logger := c.base.logger
 
-	response, err := client.CallCommand("getVersion", nil)
+	result := make(chan Mylar3RawResponse)
+
+	go func() {
+		response, err := client.CallCommand("getVersion", nil)
+		result <- Mylar3RawResponse{Data: response, Err: err}
+	}()
+
+	response := <-result
 	version := "unknown"
 	value := 0.0
-	if err == nil {
-		logger.Debug("Version info:", string(response))
+	if response.Err == nil {
+		logger.Debug("Version info:", string(response.Data))
 
 		var data map[string]interface{}
 
-		err := json.Unmarshal(response, &data)
+		err := json.Unmarshal(response.Data, &data)
 		if err != nil {
 			logger.Errorf("Error unmarshalling version info: %s", err)
 			return

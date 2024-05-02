@@ -50,10 +50,18 @@ func (c *indexCollector) collect(ch chan<- prometheus.Metric) {
 	client := c.base.client
 	logger := c.base.logger
 
-	response, err := client.CallCommand("getIndex", nil)
-	if err == nil {
-		logger.Debug("getIndex response:", string(response))
-		err := json.Unmarshal(response, &data)
+	result := make(chan Mylar3RawResponse)
+
+	go func() {
+		response, err := client.CallCommand("getIndex", nil)
+		result <- Mylar3RawResponse{Data: response, Err: err}
+	}()
+
+	response := <-result
+
+	if response.Err == nil {
+		logger.Debug("getIndex response:", string(response.Data))
+		err := json.Unmarshal(response.Data, &data)
 		if err != nil {
 			logger.Errorf("Error unmarshalling response: %s", err)
 			return

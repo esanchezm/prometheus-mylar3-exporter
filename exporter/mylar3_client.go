@@ -19,6 +19,10 @@ type Mylar3Opts struct {
 	APIKey  string
 	Timeout int
 }
+type Mylar3RawResponse struct {
+	Data []byte
+	Err  error
+}
 
 func newMylar3Client(opts *Mylar3Opts, logger *logrus.Logger) *mylar3Client {
 	return &mylar3Client{
