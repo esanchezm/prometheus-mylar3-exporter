@@ -37,7 +37,7 @@ type GlobalFlags struct {
 
 	WebListenAddress string `name:"web.listen-address" help:"Address where the exporter will listen for connections" env:"EXPORTER_LISTEN_ADDRESS" default:":9091"`
 	WebTelemetryPath string `name:"web.telemetry-path" help:"Metrics expose path" env:"EXPORTER_LISTEN_PATH" default:"/metrics"`
-	LogLevel         string `name:"log.level" help:"Only log messages with the given severity or above. Valid levels: [debug, info, warn, error, fatal]" enum:"debug,info,warn,error,fatal" env:"EXPORTER_LOG_LEVEL" default:"error"`
+	LogLevel         string `name:"log.level" help:"Only log messages with the given severity or above. Valid levels: [debug, info, warn, error, fatal]" enum:"debug,info,warn,error,fatal" env:"EXPORTER_LOG_LEVEL" default:"info"`
 
 	Version bool `name:"version" help:"Show exporter version"`
 }
