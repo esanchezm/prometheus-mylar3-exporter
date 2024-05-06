@@ -33,3 +33,14 @@ These are the metrics this program exports:
 | `mylar3_series_count` | gauge | Total number of series, grouped by `publisher` as a metric label.                                                       |
 | `mylar3_issues_count` | gauge | Total number of issues, grouped by series `publisher`, `name`, `year`, and `status`.                                    |
 | `mylar3_wanted_count` | gauge | Total number of issues in wanted state, with labels for `publisher`, `name` and `year`                  |
+
+## Screenshot
+
+![](./grafana/screenshot.png)
+
+[More info](./grafana/README.md)
+
+
+## License
+
+This software is released under the [Apache](LICENSE).
